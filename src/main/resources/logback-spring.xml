@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <contextName>logback</contextName>
+
+    <!-- 多环境日志输出 -->
+    <!-- 测试环境+开发环境. 多个使用逗号隔开 -->
+    <springProfile name="test,dev">
+        <property name="log.path" value="D:/2018-11-13-code/springcloud/iptv-log-query-interfaces/logs" />
+    </springProfile>
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <property name="log.path" value="/var/log/logsystem" />
+    </springProfile>
+
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--把每一天的日志归档到一个文件, 使用%d{yyyy-MM-dd_HH-mm}来定义精确到分的日志切分方式-->
+            <fileNamePattern>${log.path}/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--表示只保留最近30天的日志，以防止日志填满整个磁盘空间-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，例如设置为1GB的话，那么到了这个值，就会删除旧的日志-->
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+        使用mybatis的时候，sql语句是debug下才会打印，而这里我们只配置了info，所以想要查看sql语句的话，有以下两种操作：
+        第一种把<root level="info">改成<root level="DEBUG">这样就会打印sql，不过这样日志那边会出现很多其他消息。
+        第二种就是单独给dao下目录配置debug模式，代码如下，这样配置sql语句会打印，其他还是正常info级别：
+        <logger name="com.gfkd.dao" level="DEBUG" additivity="false">
+            <appender-ref ref="console" />
+        </logger>
+    -->
+    <root level="DEBUG">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+
+    <!-- <logger>用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender> -->
+    <logger name="com.nudt.query.controller.QueryController" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+
+</configuration>

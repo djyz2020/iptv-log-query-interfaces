@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:with='basePath = ${#httpServletRequest.getScheme()
+        + "://" + #httpServletRequest.getServerName() + ":"
+        + #httpServletRequest.getServerPort()
+        + #httpServletRequest.getContextPath()}'>
+<head>
+    <meta charset="UTF-8">
+    <title>配置修改</title>
+</head>
+<body>
+    <h4 class="page-header"><span class="glyphicon glyphicon-tint"></span>&nbsp; 配置修改</h4>
+
+</body>
+</html>

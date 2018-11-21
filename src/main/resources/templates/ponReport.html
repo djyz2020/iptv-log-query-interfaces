@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PON监控报告</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/static/css/bootstrap.css" />
+    <link rel="stylesheet" href="/static/css/dashboard.css" />
+    <link rel="stylesheet" href="/static/css/semantic.min.css" />
+    <!-- jQuery(Bootstrap的所有JavaScript插件都依赖 jQuery，所以必须放在前边) -->
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <!-- 加载 Bootstrap的所有 JavaScript插件，你也可以根据需要只加载单个插件。 -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/semantic.min.js" ></script>
+    <!-- 引入echarts -->
+    <script type="text/javascript" src="/static/js/echarts.js" ></script>
+    <link rel="stylesheet" href="/static/css/pon.css" />
+    <!--<link rel="stylesheet" href="/static/css/bootstrap-select.min.css" />
+    <script type="text/javascript" src="/static/js/bootstrap-select.min.js" ></script>-->
+    <script type="text/javascript" src="/static/js/bootstrap-paginator.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="col-md-12 column">
+			<!--基本情况-->
+			<div class="panel-group" style="margin-top: 20px;">
+				<div class="panel panel-default">
+					<div class="panel-heading" id="basicInfo">
+						<span class="glyphicon glyphicon-tag"></span>&nbsp;&nbsp;基本情况
+						<div class="expandIcon">
+							<span class="glyphicon glyphicon-chevron-up" style="font-size: 11px;"></span>
+						</div>
+					</div>
+					<div class="panel-collapse" id="basicInfoBody">
+						<div class="panel-body">
+							<div>所在城市：HN-CS</div>
+							<div>
+								Bras的IP地址：61.187.70.162 &nbsp;&nbsp;
+								Olt的IP地址：134.80.0.14 &nbsp;&nbsp;
+								Pon的端口号：1-0-14-6 &nbsp;&nbsp;
+								
+								<button class="btn btn-toolbar" data-toggle="modal" data-target="#myModal" 
+									onclick="getCityList()" style="display: inline;float: right;margin-top: -16px;">
+									更多PON
+								</button>	
+								<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								    <div class="modal-dialog modal-lg">
+								        <div class="modal-content">
+								            <div class="modal-header">
+								                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								                <h5 class="modal-title" id="myModalLabel">查看更多PON监控报告</h5>
+								            </div>
+								            <div class="modal-body" style="font-size: 13px;">
+								            	<div>
+								            		<div style="display: inline;float: left;line-height: 32px;">
+								            			查询条件：&nbsp;
+								            		</div>
+								            		<div style="display: inline;float: left;width: 200px;margin-right: 8px;">
+								            			<select class="ui fluid selection dropdown"
+								            				 style="height: 24px;padding-top: 7px;" id="cityList">
+									                	</select>
+								            		</div>
+								            		<div style="display: inline;float: left;width: 200px;margin-right: 8px;">
+								            			<div class="ui fluid input">
+														  <input type="text" placeholder="请输入搜索账号">
+														</div>
+								            		</div>
+								                </div>
+								            	<div style="margin-top: 45px;margin-bottom: -20px;">
+								            		<table class="table table-hover table-bordered table-striped scrolltable">
+							                            <thead style="overflow-y: scroll;">
+							                                <tr>
+							                                	<th hidden="true">账号</th>
+							                                    <th>所在城市</th>
+							                                    <th>BRAS的IP地址</th>
+							                                    <th>OLT的IP地址</th>
+							                                    <th>PON端口号</th>
+							                                    <th>操作</th>
+							                                </tr>
+							                            </thead>
+							                            <tbody style="overflow-y: scroll;" id="accountList">
+							                            </tbody>
+							                        </table>
+								            	</div>
+								            </div>
+								            <div class="modal-footer">
+								            	<div style="font-size: 13px; display: inline;float: left;">
+								            		<div style="display: inline;float: left;">
+								            			<select class="ui compact selection dropdown" 
+								            				style="height: 20px;padding: 1px 1px 1px 10px; width: 112px;">
+									                		<option><a>10条/每页</a></option>
+									                		<option><a>20条/每页</a></option>
+									                		<option><a>30条/每页</a></option>
+									                	</select>
+								            		</div>
+								            		<div style="display: inline;float: left;line-height: 32px;">
+								            			&nbsp;，共200条
+								            		</div>
+								            	</div>
+								            	<div style="font-size: 13px; display: inline;float: right;">
+								            		<ul id='paginatorTag' style="margin-top: 1px;margin-bottom: -3px;"></ul>
+								            	</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--PON运行状态-->
+			<div class="panel-group" style="margin-top: -12px;">
+				<div class="panel panel-default">
+					<div class="panel-heading"  id="runningState">
+						<span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;PON运行状态
+						<div class="expandIcon">
+							<span class="glyphicon glyphicon-chevron-up" style="font-size: 11px;"></span>
+						</div>
+					</div>
+					<div class="panel-collapse" id="runningStateBody">
+						<div class="panel-body">
+							<div>
+								这个PON口注册有 52 个账号 &nbsp;&nbsp;
+								当前有 52 个账号在线 &nbsp;&nbsp;
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--图例说明-->
+			<div class="panel-group" style="margin-top: -12px;">
+				<div class="panel panel-default">
+					<div class="panel-heading" id="legend">
+						<span class="glyphicon glyphicon-th"></span>&nbsp;&nbsp;图例说明
+						<div class="expandIcon">
+							<span class="glyphicon glyphicon-chevron-up" style="font-size: 11px;"></span>
+						</div>
+					</div>
+					<div class="panel-collapse" id="legendBody">
+						<div class="panel-body">
+							<div>
+								在线状态说明 &nbsp;&nbsp;
+								下线原因说明 &nbsp;&nbsp;
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--实时监控图表-->
+			<div class="panel-group" style="margin-top: -12px;">
+				<div class="panel panel-default">
+					<div class="panel-heading" id="monitor">
+						<span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;实时监控图表
+						<div class="expandIcon">
+							<span class="glyphicon glyphicon-chevron-up" style="font-size: 11px;"></span>
+						</div>
+					</div>
+					<div class="panel-collapse" id="monitorBody">
+						<div class="panel-body">
+							<div></div>
+							<div id="mychart" style="width: 98%;height: 400px;padding-left: 1%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/static/js/ponReport.js" ></script>
+</html>
+<!--
+     private ModelAndView toUserOperaLog(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //初始化mv
+        final ModelAndView mv = new ModelAndView(Views.VIEW_USER_OPERA_LOG);
+        //获取Session中的值
+        Object userObj = request.getSession().getAttribute("USER");
+        //获取前台传来的当前页数
+        String pageObj = request.getParameter("page");
+        //初始化页码
+        Integer page = 1;
+        //加try catch的目的是为了在首页访问该页的时候是没有page参数的，所以会转化失败，此时就用初始化时的1来代替
+        try {
+            page = Integer.parseInt(pageObj);
+        } catch (Exception e) {
+        }
+        //判断Session中该值是否为空
+        if (userObj != null) {
+            EntityUser user = (EntityUser) userObj;
+            //查询日志总数，并计算总页数
+            int count = userService.getLogCount(user.getUSER_ID(), "opera");
+            int totalPages = count / PAGE_SIZE + 1;//直接+1有个弊端，就是当数据刚满一页时，会出现一个空白页
+            mv.addObject("totalPages", totalPages);
+
+            //将当前页码放入mv中年
+            mv.addObject("currentPage", page);
+
+            //查询日志数据放入mv中
+            List<EntityLog> logList = logService.findOperaLogByPage(page, PAGE_SIZE, user.getUSER_ID());
+            mv.addObject("logs", logList);
+        } else {
+            //Session为空则直接跳转到首页
+            toIndex(request, response);
+        }
+        //返回mv
+        return mv;
+    }
+ -->

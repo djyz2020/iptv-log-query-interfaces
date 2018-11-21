@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:with='basePath = ${#httpServletRequest.getScheme()
+        + "://" + #httpServletRequest.getServerName() + ":"
+        + #httpServletRequest.getServerPort()
+        + #httpServletRequest.getContextPath()}'>
+<head>
+    <meta charset="UTF-8">
+    <title>服务接口测试</title>
+</head>
+<body>
+    <h4 class="page-header"><span class="glyphicon glyphicon-tint"></span>&nbsp; 服务接口测试</h4>
+    <button class="btn btn-primary" onclick="openSwagger()">&nbsp; 服务接口测试页面</button>
+</body>
+<script type="text/javascript">
+    var basePath = "[[${basePath}]]";
+    function openSwagger(){
+        window.open(basePath + "/swagger-ui.html");
+    }
+</script>
+</html>
